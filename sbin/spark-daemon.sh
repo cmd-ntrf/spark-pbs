@@ -146,13 +146,11 @@ run_command() {
 
   case "$mode" in
     (class)
-      nohup nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@" >> "$log" 2>&1 < /dev/null &
-      newpid="$!"
+      daemonize -o $log -e $log -p $pid nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@"
       ;;
 
     (submit)
-      nohup nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@" >> "$log" 2>&1 < /dev/null &
-      newpid="$!"
+      daemonize -o $log -e $log -p $pid nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@"
       ;;
 
     (*)
@@ -161,10 +159,9 @@ run_command() {
       ;;
   esac
 
-  echo "$newpid" > "$pid"
   sleep 2
   # Check if the process has died; in that case we'll tail the log so the user can see
-  if [[ ! $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
+  if [[ ! $(ps -p $(cat $pid) -o comm=) =~ "java" ]]; then
     echo "failed to launch $command:"
     tail -2 "$log" | sed 's/^/  /'
     echo "full log in $log"
