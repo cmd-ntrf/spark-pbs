@@ -90,7 +90,7 @@ spark_rotate_log ()
 . "${SPARK_HOME}/bin/load-spark-env.sh"
 
 if [ "$SPARK_IDENT_STRING" = "" ]; then
-  export SPARK_IDENT_STRING="$USER"
+  export SPARK_IDENT_STRING="${USER:-${PBS_O_LOGNAME}}"
 fi
 
 
