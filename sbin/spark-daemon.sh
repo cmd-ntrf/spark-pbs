@@ -146,11 +146,11 @@ run_command() {
 
   case "$mode" in
     (class)
-      daemonize -o $log -e $log -p $pid nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@"
+      daemonize -o $log -e $log -p $pid /bin/nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@"
       ;;
 
     (submit)
-      daemonize -o $log -e $log -p $pid nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@"
+      daemonize -o $log -e $log -p $pid /bin/nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@"
       ;;
 
     (*)
