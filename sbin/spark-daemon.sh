@@ -159,9 +159,18 @@ run_command() {
       ;;
   esac
 
-  sleep 2
+  newpid=$(cat $pid)
+  #Poll for up to 7 seconds for the java process to start
+  for i in {1..14}
+  do
+    if [[ $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
+       break
+    fi
+    sleep 0.5
+  done
+
   # Check if the process has died; in that case we'll tail the log so the user can see
-  if [[ ! $(ps -p $(cat $pid) -o comm=) =~ "java" ]]; then
+  if [[ ! $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
     echo "failed to launch $command:"
     tail -2 "$log" | sed 's/^/  /'
     echo "full log in $log"
