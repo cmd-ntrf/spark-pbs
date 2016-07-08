@@ -27,6 +27,9 @@
 # Options for the daemons used in the standalone deploy mode
 # - SPARK_WORKER_DIR, to set the working directory of worker processes
 
+# Generic options for the daemons used in the standalone deploy mode
+# - SPARK_LOG_DIR       Where log files are stored.  (Default: ${SPARK_HOME}/logs)
+
 export JAVA_HOME="<FILL_IN>"
 export SPARK_LOCAL_DIRS="<FILL_IN>"
 export SPARK_WORKER_DIR="<FILL_IN>"
