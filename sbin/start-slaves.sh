@@ -51,11 +51,11 @@ if [ "$SPARK_MASTER_IP" = "" ]; then
 fi
 
 if [ "$START_TACHYON" == "true" ]; then
-  pbsdsh -u cd "${SPARK_HOME}" \; "${SPARK_HOME}/sbin"/../tachyon/bin/tachyon bootstrap-conf "$SPARK_MASTER_IP"
+  pbsdsh -u "${SPARK_HOME}/sbin"/../tachyon/bin/tachyon bootstrap-conf "$SPARK_MASTER_IP"
 
   # set -t so we can call sudo
-  pbsdsh -u cd "${SPARK_HOME}" \; "${SPARK_HOME}/tachyon/bin/tachyon-start.sh" worker SudoMount \; sleep 1
+  pbsdsh -u "${SPARK_HOME}/tachyon/bin/tachyon-start.sh" worker SudoMount \; sleep 1
 fi
 
 # Launch the slaves
-pbsdsh -u cd "${SPARK_HOME}" \; "${SPARK_HOME}/sbin/start-slave.sh" "spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT"
+pbsdsh -u "${SPARK_HOME}/sbin/start-slave.sh" "spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT"
