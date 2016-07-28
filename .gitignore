@@ -1,3 +1,4 @@
 Makefile
 conf/spark-env.sh
 conf/spark-default.conf
+sbin/spark-daemon.sh

@@ -11,3 +11,6 @@ endif
 ifeq (,$(wildcard conf/spark-default.conf))
     $(error Execute configure script before installing)
 endif
+ifeq (,$(wildcard sbin/spark-daemon.sh))
+    $(error Execute configure script before installing)
+endif
