@@ -1,8 +1,8 @@
 install: check-conf-files
-	cp -b -s .orig sbin/slaves.sh $(spark_home)/sbin/
-	cp -b -s .orig sbin/spark-daemon.sh $(spark_home)/sbin/
-	cp -b -s .orig conf/spark-env.sh $(spark_home)/conf/
-	cp -b -s .orig conf/spark-default.conf $(spark_home)/conf/
+	cp -b -S .orig sbin/slaves.sh $(spark_home)/sbin/
+	cp -b -S .orig sbin/spark-daemon.sh $(spark_home)/sbin/
+	cp -b -S .orig conf/spark-env.sh $(spark_home)/conf/
+	cp -b -S .orig conf/spark-default.conf $(spark_home)/conf/
 
 check-conf-files:
 ifeq (,$(wildcard conf/spark-env.sh))
