@@ -11,3 +11,7 @@ on a cluster managed by a PBS-derived scheduler (i.e: Torque).
 - [daemonize](http://software.clapper.org/daemonize/): Some issues arise when using `nohup` 
 with pbsdsh, therefore any references to nohup is replaced by `daemonize`.
 
+## Installation
+
+1. Execute the configure script: `./configure`.
+2. Install: `make install`.
