@@ -116,6 +116,8 @@ fi
 # some variables
 log="$SPARK_LOG_DIR/spark-$SPARK_IDENT_STRING-$command-$instance-$HOSTNAME.out"
 pid="$SPARK_PID_DIR/spark-$SPARK_IDENT_STRING-$command-$instance.pid"
+# Path to daemonize
+DAEMONIZE=""
 
 # Set default scheduling priority
 if [ "$SPARK_NICENESS" = "" ]; then
@@ -146,13 +148,11 @@ run_command() {
 
   case "$mode" in
     (class)
-      nohup nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@" >> "$log" 2>&1 < /dev/null &
-      newpid="$!"
+      $DAEMONIZE -o $log -e $log -p $pid /bin/nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-class $command "$@"
       ;;
 
     (submit)
-      nohup nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@" >> "$log" 2>&1 < /dev/null &
-      newpid="$!"
+      $DAEMONIZE -o $log -e $log -p $pid /bin/nice -n "$SPARK_NICENESS" "${SPARK_HOME}"/bin/spark-submit --class $command "$@"
       ;;
 
     (*)
@@ -161,10 +161,9 @@ run_command() {
       ;;
   esac
 
-  echo "$newpid" > "$pid"
-  
-  #Poll for up to 5 seconds for the java process to start
-  for i in {1..10}
+  newpid=$(cat $pid)
+  #Poll for up to 7 seconds for the java process to start
+  for i in {1..14}
   do
     if [[ $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
        break
@@ -172,7 +171,6 @@ run_command() {
     sleep 0.5
   done
 
-  sleep 2
   # Check if the process has died; in that case we'll tail the log so the user can see
   if [[ ! $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
     echo "failed to launch $command:"
