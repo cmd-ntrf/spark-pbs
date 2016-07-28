@@ -68,36 +68,4 @@ fi
 
 . "${SPARK_HOME}/bin/load-spark-env.sh"
 
-if [ "$HOSTLIST" = "" ]; then
-  if [ "$SPARK_SLAVES" = "" ]; then
-    if [ -f "${SPARK_CONF_DIR}/slaves" ]; then
-      HOSTLIST=`cat "${SPARK_CONF_DIR}/slaves"`
-    else
-      HOSTLIST=localhost
-    fi
-  else
-    HOSTLIST=`cat "${SPARK_SLAVES}"`
-  fi
-fi
-
-
-
-# By default disable strict host key checking
-if [ "$SPARK_SSH_OPTS" = "" ]; then
-  SPARK_SSH_OPTS="-o StrictHostKeyChecking=no"
-fi
-
-for slave in `echo "$HOSTLIST"|sed  "s/#.*$//;/^$/d"`; do
-  if [ -n "${SPARK_SSH_FOREGROUND}" ]; then
-    ssh $SPARK_SSH_OPTS "$slave" $"${@// /\\ }" \
-      2>&1 | sed "s/^/$slave: /"
-  else
-    ssh $SPARK_SSH_OPTS "$slave" $"${@// /\\ }" \
-      2>&1 | sed "s/^/$slave: /" &
-  fi
-  if [ "$SPARK_SLAVE_SLEEP" != "" ]; then
-    sleep $SPARK_SLAVE_SLEEP
-  fi
-done
-
-wait
+pbsdsh -u $"${@// /\\ }"
