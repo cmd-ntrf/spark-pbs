@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+while true; do
+  fromuser=""
+  if [ -z "$SPARK_HOME_PATH" ]; then
+    default_spark_home=${SPARK_HOME}
+    read -p "Please specify the location of Spark. [Default is $default_spark_home]: " SPARK_HOME_PATH
+    fromuser="1"
+    if [ -z "$SPARK_HOME_PATH" ]; then
+      SPARK_HOME_PATH=$default_spark_home
+    fi
+  fi
+  if [ -e "$SPARK_HOME_PATH" ]; then
+    break
+  fi
+  echo "Invalid Spark home path. ${SPARK_HOME_PATH} cannot be found" 1>&2
+  if [ -z "$fromuser" ]; then
+    exit 1
+  fi
+  SPARK_HOME_PATH=""
+  # Retry
+done
+
+# Configure the compute capabilities that TensorFlow builds for.
+while true; do
+  fromuser=""
+  if [ -z "$SPARK_WORKER_MEMORY" ]; then
+    default_worker_mem="10g"
+    read -p "Please specify the quantity of memory available per worker. [Default is: \"$default_worker_mem\"]: " SPARK_WORKER_MEMORY 
+    fromuser=1
+    if [ -z "$SPARK_WORKER_MEMORY" ]; then
+      SPARK_WORKER_MEMORY=$default_worker_mem
+    fi
+  fi
+  if [[ "$SPARK_WORKER_MEMORY" =~ ^[1-9][0-9]*[mgt]$ ]]; then
+    break
+  fi
+  echo "Invalid worker memory format: ${SPARK_WORKER_MEMORY}." 1>&2
+  if [ -z "$fromuser" ]; then
+    exit 1
+  fi
+  SPARK_WORKER_MEMORY=""
+  # Retry
+done
