@@ -44,6 +44,27 @@ done
 
 while true; do
   fromuser=""
+  if [ -z "$DAEMONIZE" ]; then
+    default_daemonize=$(which daemonize)
+    read -p "Please specify the location of daemonize. [Default is $default_daemonize]: " DAEMONIZE
+    fromuser="1"
+    if [ -z "$DAEMONIZE" ]; then
+      DAEMONIZE=$default_daemonize
+    fi
+  fi
+  if [ -e "$DAEMONIZE" ]; then
+    break
+  fi
+  echo "Invalid daemonize path. ${DAEMONIZE} cannot be found" 1>&2
+  if [ -z "$fromuser" ]; then
+    exit 1
+  fi
+  DAEMONIZE=""
+  # Retry
+done
+
+while true; do
+  fromuser=""
   if [ -z "$LOCAL_DIR_PATH" ]; then
     default_local_dir="/tmp"
     read -p "Please specify the path for local and worker directory. [Default is $default_local_dir]: " SPARK_LOCAL_DIR
@@ -86,6 +107,9 @@ done
 
 cp conf/spark-default.conf{.template,}
 sed -i "s;spark.executor.memory <FILL_IN>;spark.executor.memory $SPARK_WORKER_MEMORY;g" conf/spark-default.conf
+
+cp sbin/spark-daemon.sh{.template,}
+sed -i "s;DAEMONIZE=\"<FILL_IN>\";DAEMONIZE=\"$DAEMONIZE\";g" sbin/spark-daemon.sh
 
 cp conf/spark-env.sh{.template,}
 sed -i "s;JAVA_HOME=\"<FILL_IN>\";JAVA_HOME=\"$JAVA_HOME_PATH\";g" conf/spark-env.sh

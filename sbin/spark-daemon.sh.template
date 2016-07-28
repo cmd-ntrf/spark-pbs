@@ -117,7 +117,7 @@ fi
 log="$SPARK_LOG_DIR/spark-$SPARK_IDENT_STRING-$command-$instance-$HOSTNAME.out"
 pid="$SPARK_PID_DIR/spark-$SPARK_IDENT_STRING-$command-$instance.pid"
 # Path to daemonize
-DAEMONIZE="/software6/apps/spark/1.6.0/sbin/daemonize"
+DAEMONIZE="<FILL_IN>"
 
 # Set default scheduling priority
 if [ "$SPARK_NICENESS" = "" ]; then
