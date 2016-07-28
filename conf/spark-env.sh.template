@@ -34,6 +34,8 @@ export JAVA_HOME="<FILL_IN>"
 export SPARK_LOCAL_DIRS="<FILL_IN>"
 export SPARK_WORKER_DIR="<FILL_IN>"
 
+export SPARK_IDENT_STRING="${PBS_O_LOGNAME:-}"
+
 # Save Spark log where the job was started
 if [[ -w "${PBS_O_WORKDIR}" ]]; then
     export SPARK_LOG_DIR="${PBS_O_WORKDIR}/spark_${VERSION}_logs"
