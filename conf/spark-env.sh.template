@@ -38,5 +38,5 @@ export SPARK_WORKER_DIR="<FILL_IN>"
 if [[ -w "${PBS_O_WORKDIR}" ]]; then
     export SPARK_LOG_DIR="${PBS_O_WORKDIR}/spark_${VERSION}_logs"
 else
-    export SPARK_LOG_DIR="<FILL_IN>"
+    export SPARK_LOG_DIR="/tmp"
 fi
