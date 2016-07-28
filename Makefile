@@ -1,6 +1,5 @@
 install: check-spark-home check-conf-files
-	cp sbin/start-slaves.sh ${SPARK_HOME}/sbin
-	cp sbin/stop-slaves.sh ${SPARK_HOME}/sbin
+	cp sbin/slaves.sh ${SPARK_HOME}/sbin
 	cp sbin/spark-daemon.sh ${SPARK_HOME}/sbin
 	cp conf/spark-env.sh ${SPARK_HOME}/conf
 	cp conf/spark-default.conf ${SPARK_HOME}/conf
