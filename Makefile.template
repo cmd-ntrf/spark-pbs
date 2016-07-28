@@ -1,4 +1,3 @@
-spark_home := /software6/apps/spark/1.6.0
 install: check-conf-files
 	cp sbin/slaves.sh $(spark_home)/sbin/
 	cp sbin/spark-daemon.sh $(spark_home)/sbin/
