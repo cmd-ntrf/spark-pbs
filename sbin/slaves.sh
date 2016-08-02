@@ -68,4 +68,5 @@ fi
 
 . "${SPARK_HOME}/bin/load-spark-env.sh"
 
-pbsdsh -u $"${@// /\\ }"
+cmd=$"${@// /\\ }"
+pbsdsh -u sh -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH $cmd"
