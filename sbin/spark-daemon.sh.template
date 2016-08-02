@@ -162,14 +162,8 @@ run_command() {
   esac
 
   newpid=$(cat $pid)
-  #Poll for up to 7 seconds for the java process to start
-  for i in {1..14}
-  do
-    if [[ $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
-       break
-    fi
-    sleep 0.5
-  done
+  #Poll pid process until it is no longer bash
+  while [[ $(ps -p "$newpid" -o comm=) = "bash" ]]; do sleep 0.5; done
 
   # Check if the process has died; in that case we'll tail the log so the user can see
   if [[ ! $(ps -p "$newpid" -o comm=) =~ "java" ]]; then
